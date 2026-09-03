@@ -1,0 +1,86 @@
+@import "tailwindcss";
+
+:root {
+  --background: rgb(255 255 255);
+  --foreground: rgb(23 23 23);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: rgb(10 10 10);
+    --foreground: rgb(237 237 237);
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+/* ---------------------------------------------------------------------------
+   Supabase Auth UI (@supabase/auth-ui-react) — styled with Tailwind utilities
+   via @apply. The library ships with `appearance={{ extend: false }}`, so it
+   only emits `supabase-auth-ui_ui-*` class names and none of its own CSS.
+   --------------------------------------------------------------------------- */
+
+.auth-box :where(.supabase-auth-ui_ui-container) {
+  @apply flex flex-col gap-4;
+}
+
+.auth-box form {
+  @apply flex flex-col gap-3;
+}
+
+/* social auth block sits above the email form */
+.auth-box form + form {
+  @apply mt-0;
+}
+
+.auth-box :where(.supabase-auth-ui_ui-label) {
+  @apply mb-1 block text-xs font-medium text-zinc-400;
+}
+
+.auth-box :where(.supabase-auth-ui_ui-input) {
+  @apply w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm
+    text-zinc-50 placeholder:text-zinc-600
+    focus:border-zinc-400 focus:outline-none;
+}
+
+.auth-box :where(.supabase-auth-ui_ui-button) {
+  @apply flex w-full items-center justify-center gap-2 rounded-lg px-4 py-2
+    text-sm font-medium transition-colors disabled:cursor-not-allowed
+    disabled:opacity-60;
+}
+
+/* primary (email) submit button */
+.auth-box :where(button[type="submit"].supabase-auth-ui_ui-button) {
+  @apply bg-white text-black hover:bg-zinc-200;
+}
+
+/* provider (Google) button */
+.auth-box :where(.supabase-auth-ui_ui-button:not([type="submit"])) {
+  @apply border border-zinc-700 bg-zinc-900 text-zinc-100 hover:bg-zinc-800;
+}
+
+.auth-box :where(.supabase-auth-ui_ui-divider) {
+  @apply my-1 flex items-center gap-3 text-xs text-zinc-600
+    before:h-px before:flex-1 before:bg-zinc-800
+    after:h-px after:flex-1 after:bg-zinc-800;
+}
+
+.auth-box :where(.supabase-auth-ui_ui-anchor) {
+  @apply text-xs text-zinc-400 no-underline hover:text-zinc-100;
+}
+
+.auth-box :where(.supabase-auth-ui_ui-message) {
+  @apply rounded-lg border border-zinc-800 bg-zinc-900 px-3 py-2 text-xs
+    text-zinc-400;
+}
