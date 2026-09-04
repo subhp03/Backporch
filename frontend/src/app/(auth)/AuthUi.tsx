@@ -16,8 +16,6 @@ export function AuthUi({ view }: { view: "sign_in" | "sign_up" }) {
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
 
-  const heading = view === "sign_in" ? "Sign in" : "Create an account";
-
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
@@ -66,7 +64,9 @@ export function AuthUi({ view }: { view: "sign_in" | "sign_up" }) {
 
   return (
     <div>
-      <h1 className="mb-6 text-xl font-semibold text-zinc-50">{heading}</h1>
+      <h1 className="mb-6 text-xl font-semibold text-zinc-50">
+        {view === "sign_in" ? "Sign in" : "Create an account"}
+      </h1>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
         <div>
@@ -120,7 +120,7 @@ export function AuthUi({ view }: { view: "sign_in" | "sign_up" }) {
           disabled={loading}
           className="flex w-full items-center justify-center gap-2 rounded-lg bg-white px-4 py-2 text-sm font-medium text-black transition-colors hover:bg-zinc-200 disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {loading ? "…" : heading}
+          {loading ? "…" : view === "sign_in" ? "Sign in" : "Sign up"}
         </button>
       </form>
 
