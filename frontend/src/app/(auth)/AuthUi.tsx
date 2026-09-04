@@ -16,16 +16,17 @@ export function AuthUi({ view }: { view: "sign_in" | "sign_up" }) {
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
 
+  const isSignIn = view === "sign_in";
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
     setError(null);
     setMessage(null);
 
-    const { error } =
-      view === "sign_in"
-        ? await supabase.auth.signInWithPassword({ email, password })
-        : await supabase.auth.signUp({
+    const { error } = isSignIn
+      ? await supabase.auth.signInWithPassword({ email, password })
+      : await supabase.auth.signUp({
             email,
             password,
             options: {
@@ -39,7 +40,7 @@ export function AuthUi({ view }: { view: "sign_in" | "sign_up" }) {
       return;
     }
 
-    if (view === "sign_up") {
+    if (!isSignIn) {
       setMessage("Check your email to confirm your account.");
       setLoading(false);
       return;
@@ -65,7 +66,7 @@ export function AuthUi({ view }: { view: "sign_in" | "sign_up" }) {
   return (
     <div>
       <h1 className="mb-6 text-xl font-semibold text-zinc-50">
-        {view === "sign_in" ? "Sign in" : "Create an account"}
+        {isSignIn ? "Sign in" : "Create an account"}
       </h1>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
@@ -96,7 +97,7 @@ export function AuthUi({ view }: { view: "sign_in" | "sign_up" }) {
             type="password"
             required
             minLength={6}
-            autoComplete={view === "sign_in" ? "current-password" : "new-password"}
+            autoComplete={isSignIn ? "current-password" : "new-password"}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="••••••••"
@@ -120,7 +121,7 @@ export function AuthUi({ view }: { view: "sign_in" | "sign_up" }) {
           disabled={loading}
           className="flex w-full items-center justify-center gap-2 rounded-lg bg-white px-4 py-2 text-sm font-medium text-black transition-colors hover:bg-zinc-200 disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {loading ? "…" : view === "sign_in" ? "Sign in" : "Sign up"}
+          {loading ? "…" : isSignIn ? "Sign in" : "Sign up"}
         </button>
       </form>
 
@@ -140,7 +141,7 @@ export function AuthUi({ view }: { view: "sign_in" | "sign_up" }) {
         Continue with Google
       </button>
 
-      {view === "sign_in" ? (
+      {isSignIn ? (
         <p className="mt-4 text-center text-xs text-zinc-400">
           Don&apos;t have an account?{" "}
           <Link href="/sign-up" className="text-zinc-100 hover:underline">
