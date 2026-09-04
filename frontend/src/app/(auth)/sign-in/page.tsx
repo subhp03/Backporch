@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { AuthBox } from "../AuthBox";
+import { AuthUi } from "../AuthUi";
 
 export const metadata: Metadata = {
   title: "Sign in · Backporch",
 };
 
 export default function SignInPage() {
-  return <AuthBox view="sign_in" />;
+  return <AuthUi view="sign_in" />;
 }
