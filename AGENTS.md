@@ -13,6 +13,14 @@ Keep the subject line terse — no body unless the *why* isn't obvious from the 
 
 Title follows the same Conventional Commits format as commits.
 
-Keep descriptions short: what changed, and how to verify it. No estimated
+Description uses this format:
+
+```
+## Description
+## Type of Change
+## Changes Made
+```
+
+Keep each section short: what changed, and how to verify it. No estimated
 effort/time — it's not useful here and tends to just be wrong. If it needs
-more than a few bullet points, the PR is probably too big.
+more than a few bullet points per section, the PR is probably too big.
