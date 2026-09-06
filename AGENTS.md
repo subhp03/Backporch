@@ -10,9 +10,15 @@ instead. This applies to code comments, docs, commit messages, and PR text.
 Use [Conventional Commits](https://www.conventionalcommits.org/): `<type>(<scope>): <description>`
 
 Common types: `feat`, `fix`, `refactor`, `chore`, `docs`, `test`, `style`, `perf`.
-Scope is optional; use the app/package name when it helps (`frontend`, `backporch`).
+Scope is optional; use the app/package name when it helps (`frontend`, `backend`).
 
 Keep the subject line terse. No body unless the *why* isn't obvious from the diff.
+
+## Projects
+
+- `frontend/` is the Next.js app (App Router). It has its own `AGENTS.md`,
+  auto-managed by Next.js. Don't hand-edit it.
+- `backend/` is the Python scraper for Kolkata property listings (MagicBricks).
 
 ## Pull requests
 
