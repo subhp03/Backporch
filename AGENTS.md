@@ -1,5 +1,10 @@
 # Repo conventions
 
+## Writing
+
+Do not use em dashes (—). Use a colon, comma, parentheses, or two sentences
+instead. This applies to code comments, docs, commit messages, and PR text.
+
 ## Commits
 
 Use [Conventional Commits](https://www.conventionalcommits.org/): `<type>(<scope>): <description>`
@@ -7,7 +12,7 @@ Use [Conventional Commits](https://www.conventionalcommits.org/): `<type>(<scope
 Common types: `feat`, `fix`, `refactor`, `chore`, `docs`, `test`, `style`, `perf`.
 Scope is optional; use the app/package name when it helps (`frontend`, `backporch`).
 
-Keep the subject line terse — no body unless the *why* isn't obvious from the diff.
+Keep the subject line terse. No body unless the *why* isn't obvious from the diff.
 
 ## Pull requests
 
@@ -22,5 +27,5 @@ Description uses this format:
 ```
 
 Keep each section short: what changed, and how to verify it. No estimated
-effort/time — it's not useful here and tends to just be wrong. If it needs
+effort/time, it's not useful here and tends to just be wrong. If it needs
 more than a few bullet points per section, the PR is probably too big.
