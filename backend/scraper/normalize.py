@@ -1,9 +1,9 @@
 """
 Map a raw MagicBricks `resultList` item onto `Listing`.
 
-MagicBricks items are already structured (~180 fields). We pick only the
-factual ones: numbers, categories, coordinates, timestamps. Their
-copyrighted text and advertiser personal data are deliberately not read.
+MagicBricks items are already structured (~180 fields). We pick the factual
+ones plus the source title and description (kept for embedding and ranking,
+not for verbatim display). Photos and advertiser personal data are not read.
 """
 
 from typing import Optional
@@ -65,6 +65,9 @@ def to_listing(raw: dict, category: str) -> Listing:
         source="magicbricks",
         source_id=str(raw.get("id")) if raw.get("id") is not None else None,
         url=_detail_url(raw),
+
+        title=raw.get("propertyTitle") or raw.get("auto_desc"),
+        description=raw.get("seoDesc") or raw.get("dtldesc"),
 
         price=_int(raw.get("price")),
         price_display=raw.get("priceD"),
