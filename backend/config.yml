@@ -1,0 +1,19 @@
+# Backporch scraper configuration
+# Run: python scrape.py
+
+city: kolkata
+categories: [sale, rent]    
+
+# Property types to include. Omit for the default (all places to live).
+# Options: apartment, builder_floor, penthouse, studio,
+#          independent_house, villa, plot
+property_types: [apartment, builder_floor, penthouse, studio, independent_house, villa]
+
+max_pages: 20                # 20 pages * 30 = up to 600 listings per category
+
+rate_limit:
+  between_pages: 1.0         # seconds between API pages, to avoid rate limiting
+
+output:
+  dir: output/
+  format: both               # json | csv | both
