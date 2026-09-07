@@ -19,6 +19,10 @@ class Listing(BaseModel):
     source_id: Optional[str] = None
     url: Optional[str] = None
 
+    # Source text: for embedding and LLM ranking only, not for verbatim display.
+    title: Optional[str] = None
+    description: Optional[str] = None
+
     price: Optional[int] = None            # rupees, absolute
     price_display: Optional[str] = None    # "1.17 Cr", "22,000"
     price_per_sqft: Optional[float] = None
