@@ -17,7 +17,7 @@ import sys
 
 import yaml
 
-from scraper import FIELDS, iter_listings, make_session, to_listing
+from scraper import FIELDS, collect_listings
 
 
 def load_config(path: str) -> dict:
@@ -74,24 +74,13 @@ def main() -> None:
     args = parser.parse_args()
 
     cfg = load_config(args.config)
-    city = cfg.get("city", "kolkata")
-    categories = cfg.get("categories", ["sale"])
-    max_pages = cfg.get("max_pages", 20)
-    property_types = cfg.get("property_types")  # None -> scraper default
-    between = cfg.get("rate_limit", {}).get("between_pages", 1.0)
     out_cfg = cfg.get("output", {})
     out_dir = out_cfg.get("dir", "output").rstrip("/\\")
     out_fmt = out_cfg.get("format", "json")
 
     os.makedirs(out_dir, exist_ok=True)
-    session = make_session()
 
-    rows: list[dict] = []
-    for category in categories:
-        for raw in iter_listings(
-            session, city, category, max_pages, between, property_types
-        ):
-            rows.append(to_listing(raw, category).model_dump())
+    rows = [listing.model_dump() for listing in collect_listings(cfg)]
 
     if out_fmt in ("json", "both"):
         path = os.path.join(out_dir, "results.json")
