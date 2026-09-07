@@ -7,6 +7,12 @@ instead. This applies to code comments, docs, commit messages, and PR text.
 
 ## Commits
 
+Do not commit, stage, stash, push, or otherwise change git state unless the
+user asks in that message. Finishing a task is not a cue to commit. When the
+work is done, summarize it and stop; let the user decide when to commit.
+
+When the user does ask for a commit:
+
 Use [Conventional Commits](https://www.conventionalcommits.org/): `<type>(<scope>): <description>`
 
 Common types: `feat`, `fix`, `refactor`, `chore`, `docs`, `test`, `style`, `perf`.
