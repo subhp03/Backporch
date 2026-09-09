@@ -7,13 +7,8 @@ export default async function Home() {
   } = await supabase.auth.getUser();
 
   return (
-    <main className="flex min-h-dvh flex-col items-center justify-center gap-6 bg-black px-4 text-center">
-      <h1 className="text-2xl font-semibold tracking-tight text-zinc-50">
-        Backporch
-      </h1>
-      <p className="text-sm text-zinc-400">
-        Signed in as {user?.email ?? "—"}
-      </p>
+    <div className="mx-auto flex max-w-6xl flex-col items-start gap-4 px-4 py-10">
+      <p className="text-sm text-zinc-400">Signed in as {user?.email ?? "—"}</p>
       <form action="/sign-out" method="post">
         <button
           type="submit"
@@ -22,6 +17,6 @@ export default async function Home() {
           Sign out
         </button>
       </form>
-    </main>
+    </div>
   );
 }
