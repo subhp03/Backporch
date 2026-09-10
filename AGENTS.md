@@ -26,6 +26,24 @@ Keep the subject line terse. No body unless the *why* isn't obvious from the dif
   auto-managed by Next.js. Don't hand-edit it.
 - `backend/` is the Python scraper for Kolkata property listings (MagicBricks).
 
+## Code review
+
+When reviewing a PR or branch diff (including via `/code-review`), on top of the
+usual correctness and simplification checks:
+
+- This Next.js version has breaking changes vs. common training data. Before
+  flagging routing, `params`, caching, or server/client component issues, check
+  the guides in `frontend/node_modules/next/dist/docs/`. Don't invent API rules
+  from memory.
+- Auth: watch for Supabase RLS assumptions vs. service-role usage, and user input
+  reaching the DB or the model without `zod` validation.
+- SQL: flag string-built queries (`postgres` supports tagged-template params).
+- Data: `backend/db/schema.sql` changes should match the code that reads them;
+  watch embedding dimension mismatches.
+- Enforce the Writing and Commits rules above (no em dashes, Conventional Commits).
+- `frontend/AGENTS.md` is Next.js-managed; its agent-rules block being committed
+  is fine, not a finding.
+
 ## Pull requests
 
 Title follows the same Conventional Commits format as commits.
