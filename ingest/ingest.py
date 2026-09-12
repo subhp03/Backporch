@@ -7,7 +7,7 @@ Scrape MagicBricks and sync the results into the Supabase `listings` table.
 Flow: scrape -> upsert (facts + source text) -> embed rows whose text changed
 -> deactivate rows not seen past a grace window -> purge rows long inactive.
 
-Env (read from backend/.env if present, else the environment):
+Env (read from ingest/.env if present, else the environment):
     DATABASE_URL    postgresql://... (Supabase, Project Settings -> Database)
     GEMINI_API_KEY  for text-embedding-004
 """
