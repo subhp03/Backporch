@@ -3,6 +3,7 @@
 :root {
   --background: rgb(255 255 255);
   --foreground: rgb(23 23 23);
+  --skeleton: rgba(0, 0, 0, 0.1);
 }
 
 @theme inline {
@@ -16,6 +17,7 @@
   :root {
     --background: rgb(10 10 10);
     --foreground: rgb(237 237 237);
+    --skeleton: rgba(255, 255, 255, 0.1);
   }
 }
 
