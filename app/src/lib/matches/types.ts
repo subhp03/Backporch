@@ -21,3 +21,6 @@ export interface Candidate {
 export type ListingDTO = Omit<Candidate, "title" | "description"> & {
   reason: string;
 };
+
+/** Discover just randomly outputs properties close to the user so no LLM reasoning needed */
+export type DiscoverListingDTO = Omit<ListingDTO, "reason">;
