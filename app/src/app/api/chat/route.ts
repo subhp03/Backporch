@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { generateText } from "ai";
 import { google } from "@ai-sdk/google";
+import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { sql } from "@/lib/db";
 import { updateProfile } from "@/lib/chat/profile";
@@ -8,6 +9,11 @@ import { getConversation, getProfile } from "@/lib/chat/conversation";
 import type { ChatResponse, ChatHistoryResponse } from "@/lib/chat/types";
 
 export const runtime = "nodejs";
+
+const ChatRequestSchema = z.object({
+  message: z.string().trim().min(1),
+  conversationId: z.string().optional(),
+});
 
 export async function POST(request: NextRequest) {
   const supabase = await createClient();
@@ -18,20 +24,18 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
 
-  let body: { message?: unknown; conversationId?: unknown };
+  let requestBody: unknown;
   try {
-    body = await request.json();
+    requestBody = await request.json();
   } catch {
     return NextResponse.json({ error: "invalid json" }, { status: 400 });
   }
-  const message = typeof body.message === "string" ? body.message.trim() : "";
-  if (!message) {
+  const parsedRequest = ChatRequestSchema.safeParse(requestBody);
+  if (!parsedRequest.success) {
     return NextResponse.json({ error: "message is required" }, { status: 400 });
   }
-  const conversationId = await getConversation(
-    user.id,
-    typeof body.conversationId === "string" ? body.conversationId : undefined,
-  );
+  const { message, conversationId: requestedConversationId } = parsedRequest.data;
+  const conversationId = await getConversation(user.id, requestedConversationId);
   if (!conversationId) {
     return NextResponse.json({ error: "conversation not found" }, { status: 404 });
   }
