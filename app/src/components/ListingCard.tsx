@@ -28,7 +28,7 @@ export function ListingCard({
   ].filter(Boolean);
 
   const card = (
-    <div className="flex flex-col gap-2 rounded-lg border border-red-800 bg-zinc-950 p-4 transition-colors hover:border-blue-700">
+    <div className="flex flex-col gap-2 rounded-lg border border-zinc-800 bg-zinc-950 p-4 transition-colors hover:border-blue-700">
       <div className="flex items-start justify-between gap-2">
         <span className="text-lg font-semibold text-zinc-100">
           {price_display ?? "Price on request"}
