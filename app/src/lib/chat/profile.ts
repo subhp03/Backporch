@@ -32,3 +32,15 @@ export async function updateProfile(
   });
   return output;
 }
+
+const PROFILE_FIELDS = [
+  "listing_type",
+  "min_bhk",
+  "max_price",
+  "localities",
+  "soft_prefs",
+] as const satisfies readonly (keyof Profile)[];
+
+export function missingProfileFields(profile: Profile): (keyof Profile)[] {
+  return PROFILE_FIELDS.filter((field) => profile[field] === null);
+}

@@ -4,7 +4,7 @@ import { google } from "@ai-sdk/google";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { sql } from "@/lib/db";
-import { updateProfile } from "@/lib/chat/profile";
+import { updateProfile, missingProfileFields } from "@/lib/chat/profile";
 import { getConversation, getProfile } from "@/lib/chat/conversation";
 import type { ChatResponse, ChatHistoryResponse } from "@/lib/chat/types";
 
@@ -63,12 +63,19 @@ export async function POST(request: NextRequest) {
         updated_at = now()
     `;
 
+    const missingFields = missingProfileFields(profile);
     const { text: reply } = await generateText({
       model: google("gemini-flash-lite-latest"),
       system:
-        "You are a concise Kolkata property search assistant. In one or two " +
-        "sentences, tell the user what you understood about their preferences.",
-      prompt: `Profile: ${JSON.stringify(profile)}`,
+        missingFields.length > 0
+          ? "You are onboarding a user for a Kolkata property search. Ask a " +
+            "short, natural question about ONE of the missing fields below. " +
+            "Do not ask about fields that are already filled in."
+          : "You are a concise Kolkata property search assistant. In one " +
+            "sentence, acknowledge that their preferences are complete.",
+      prompt:
+        `Profile: ${JSON.stringify(profile)}\n` +
+        `Missing fields: ${missingFields.join(", ") || "none"}`,
     });
 
     await sql`
