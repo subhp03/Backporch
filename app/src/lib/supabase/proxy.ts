@@ -37,6 +37,12 @@ export async function updateSession(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   const { pathname } = request.nextUrl;
+
+  // API routes handle their own auth and return JSON, never a redirect.
+  if (pathname.startsWith("/api")) {
+    return response;
+  }
+
   const isPublic =
     pathname.startsWith("/sign-in") ||
     pathname.startsWith("/sign-up") ||
