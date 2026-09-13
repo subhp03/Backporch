@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { MessageCircle } from "lucide-react";
+import { Settings } from "lucide-react";
 import type { User } from "@supabase/supabase-js";
 import { userAvatarUrl, userInitial } from "@/utils/user";
 
@@ -9,38 +9,38 @@ export function Navbar({ user }: { user: User }) {
 
   return (
     <header className="border-b border-zinc-800 bg-black">
-      <nav className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
-        <Link href="/" className="flex items-center gap-2">
+      <nav className="flex h-16 items-center justify-between px-4">
+        <Link href="/" className="flex items-center gap-2.5">
           <Image
             src="/logo.png"
             alt=""
-            width={28}
-            height={28}
+            width={32}
+            height={32}
             className="rounded-md"
           />
-          <span className="text-lg font-semibold tracking-tight text-zinc-100">
+          <span className="text-xl font-semibold tracking-tight text-zinc-100">
             BackPorch
           </span>
         </Link>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3.5">
           <Link
-            href="/chat"
-            className="flex items-center gap-1.5 rounded-lg border border-zinc-700 px-3 py-1.5 text-sm text-zinc-100 transition-colors hover:bg-zinc-800"
+            href="/profile"
+            className="flex items-center gap-1.5 rounded-lg px-3.5 py-1.5 text-sm text-zinc-100 transition-colors hover:bg-zinc-900"
           >
-            <MessageCircle className="h-4 w-4" />
+            <Settings className="h-7 w-7" />
           </Link>
 
           {src ? (
             <Image
               src={src}
               alt=""
-              width={28}
-              height={28}
+              width={32}
+              height={32}
               className="rounded-full border border-zinc-700"
             />
           ) : (
-            <span className="flex h-7 w-7 items-center justify-center rounded-full border border-zinc-700 bg-zinc-800 text-xs font-medium text-zinc-100">
+            <span className="flex h-8 w-8 items-center justify-center rounded-full border border-zinc-700 bg-zinc-800 text-sm font-medium text-zinc-100">
               {userInitial(user)}
             </span>
           )}
