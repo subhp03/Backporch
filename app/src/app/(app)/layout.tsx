@@ -1,7 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { Navbar } from "@/components/Navbar";
-import { Sidebar } from "@/components/Sidebar";
+import { AppShell } from "@/components/AppShell";
 
 export default async function AppLayout({ children }: LayoutProps<"/">) {
   const supabase = await createClient();
@@ -14,13 +13,5 @@ export default async function AppLayout({ children }: LayoutProps<"/">) {
     redirect("/sign-in");
   }
 
-  return (
-    <div className="flex min-h-dvh flex-col bg-black">
-      <Navbar user={user} />
-      <div className="flex flex-1">
-        <Sidebar />
-        <main className="flex-1">{children}</main>
-      </div>
-    </div>
-  );
+  return <AppShell user={user}>{children}</AppShell>;
 }
