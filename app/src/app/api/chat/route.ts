@@ -1,11 +1,9 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { generateText } from "ai";
-import { google } from "@ai-sdk/google";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { sql } from "@/lib/db";
-import { updateProfile, missingProfileFields } from "@/lib/chat/profile";
-import { getConversation, getProfile } from "@/lib/chat/conversation";
+import { updateProfile, generateAssistantReply } from "@/lib/chat/profile";
+import { getConversation, getOrCreateConversation, getProfile } from "@/lib/chat/conversation";
 import type { ChatResponse, ChatHistoryResponse } from "@/lib/chat/types";
 
 export const runtime = "nodejs";
@@ -47,12 +45,12 @@ export async function POST(request: NextRequest) {
 
   try {
     const current = await getProfile(user.id);
-    const profile = await updateProfile(current, message);
+    const extractedProfile = await updateProfile(current, message);
 
     await sql`
       insert into profiles (user_id, listing_type, min_bhk, max_price, localities, soft_prefs, raw, updated_at)
-      values (${user.id}, ${profile.listing_type}, ${profile.min_bhk}, ${profile.max_price},
-              ${profile.localities}, ${profile.soft_prefs}, ${sql.json(profile)}, now())
+      values (${user.id}, ${extractedProfile.listing_type}, ${extractedProfile.min_bhk}, ${extractedProfile.max_price},
+              ${extractedProfile.localities}, ${extractedProfile.soft_prefs}, ${sql.json(extractedProfile)}, now())
       on conflict (user_id) do update set
         listing_type = excluded.listing_type,
         min_bhk = excluded.min_bhk,
@@ -63,20 +61,10 @@ export async function POST(request: NextRequest) {
         updated_at = now()
     `;
 
-    const missingFields = missingProfileFields(profile);
-    const { text: reply } = await generateText({
-      model: google("gemini-flash-lite-latest"),
-      system:
-        missingFields.length > 0
-          ? "You are onboarding a user for a Kolkata property search. Ask a " +
-            "short, natural question about ONE of the missing fields below. " +
-            "Do not ask about fields that are already filled in."
-          : "You are a concise Kolkata property search assistant. In one " +
-            "sentence, acknowledge that their preferences are complete.",
-      prompt:
-        `Profile: ${JSON.stringify(profile)}\n` +
-        `Missing fields: ${missingFields.join(", ") || "none"}`,
-    });
+    // Re-read what was actually persisted rather than trusting the LLM's
+    // in-memory output, so the next question reflects the real DB state.
+    const profile = await getProfile(user.id);
+    const reply = await generateAssistantReply(profile);
 
     await sql`
       insert into messages (conversation_id, role, content)
@@ -105,25 +93,33 @@ export async function GET() {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
 
-  const [conversation] = await sql<{ id: string }[]>`
-    select id from conversations where user_id = ${user.id}
-    order by updated_at desc limit 1
+  const profile = await getProfile(user.id);
+  const conversationId = await getOrCreateConversation(user.id);
+
+  const existingMessages = await sql<
+    { role: "user" | "assistant"; content: string; listing_ids: string[] | null }[]
+  >`
+    select role, content, listing_ids from messages
+    where conversation_id = ${conversationId}
+    order by created_at asc
   `;
 
-  const profile = await getProfile(user.id);
+  // Brand-new conversation: seed the AI's opening message so the user
+  // isn't the one who has to speak first.
+  const messages: { role: "user" | "assistant"; content: string; listing_ids: string[] | null }[] =
+    existingMessages.length > 0 ? existingMessages : [];
 
-  const messages = conversation
-    ? await sql<
-        { role: "user" | "assistant"; content: string; listing_ids: string[] | null }[]
-      >`
-        select role, content, listing_ids from messages
-        where conversation_id = ${conversation.id}
-        order by created_at asc
-      `
-    : [];
+  if (messages.length === 0) {
+    const opening = await generateAssistantReply(profile, { isOpening: true });
+    await sql`
+      insert into messages (conversation_id, role, content)
+      values (${conversationId}, 'assistant', ${opening})
+    `;
+    messages.push({ role: "assistant", content: opening, listing_ids: null });
+  }
 
   const payload: ChatHistoryResponse = {
-    conversationId: conversation?.id ?? null,
+    conversationId,
     messages: messages.map((m) => ({
       role: m.role,
       content: m.content,

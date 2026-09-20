@@ -29,18 +29,8 @@ export async function getProfile(userId: string): Promise<Profile> {
   return profileFromRow(row);
 }
 
-export async function getConversation(
-  userId: string,
-  conversationId?: string,
-): Promise<string | null> {
-  if (conversationId) {
-    const [row] = await sql<{ id: string }[]>`
-      select id from conversations
-      where id = ${conversationId} and user_id = ${userId}
-    `;
-    if (!row) return null;
-    return row.id;
-  }
+// Finds or creates the user's most recent conversation. Always resolves.
+export async function getOrCreateConversation(userId: string): Promise<string> {
   const [existing] = await sql<{ id: string }[]>`
     select id from conversations where user_id = ${userId}
     order by updated_at desc limit 1
@@ -50,4 +40,20 @@ export async function getConversation(
     insert into conversations (user_id) values (${userId}) returning id
   `;
   return created.id;
+}
+
+// Resolves a specific conversation the caller claims to own, falling back to
+// getOrCreateConversation when no id was given. Returns null only when the
+// given id doesn't belong to this user.
+export async function getConversation(
+  userId: string,
+  conversationId?: string,
+): Promise<string | null> {
+  if (!conversationId) return getOrCreateConversation(userId);
+
+  const [row] = await sql<{ id: string }[]>`
+    select id from conversations
+    where id = ${conversationId} and user_id = ${userId}
+  `;
+  return row ? row.id : null;
 }
