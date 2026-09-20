@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { sql } from "@/lib/db";
 import { getProfile } from "@/lib/chat/conversation";
 import { missingProfileFields } from "@/lib/chat/profile";
+import { toSqlFilters } from "@/lib/matches/filters";
 import type { DiscoverListingDTO } from "@/lib/matches/types";
 
 export async function GET() {
@@ -19,6 +20,8 @@ export async function GET() {
     return NextResponse.json({ status: "incomplete" });
   }
 
+  const filteredProfile = toSqlFilters(profile);
+
   const listings = await sql<DiscoverListingDTO[]>`
     select
       source || ':' || source_id as id,
@@ -26,7 +29,7 @@ export async function GET() {
       furnishing, listing_type, property_type, possession, posted_at
     from listings
     where is_active
-      and (${profile.localities}::text[] is null or locality = any(${profile.localities}::text[]))
+      and (${filteredProfile.localities}::text[] is null or locality = any(${filteredProfile.localities}::text[]))
     order by random()
     limit 20
   `;

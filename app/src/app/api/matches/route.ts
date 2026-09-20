@@ -5,6 +5,7 @@ import { getProfile } from "@/lib/chat/conversation";
 import { missingProfileFields } from "@/lib/chat/profile";
 import { embedQuery } from "@/lib/embeddings";
 import { rankListings } from "@/lib/matches/rank";
+import { toSqlFilters } from "@/lib/matches/filters";
 import type { Candidate, ListingDTO } from "@/lib/matches/types";
 
 export async function GET() {
@@ -17,13 +18,14 @@ export async function GET() {
   }
 
   const profile = await getProfile(user.id);
-  if (!profile.soft_prefs || missingProfileFields(profile).length > 0) {
+  if (missingProfileFields(profile).length > 0) {
     return NextResponse.json({ status: "incomplete" });
   }
 
   try {
-    const vec = await embedQuery(profile.soft_prefs);
+    const vec = await embedQuery(profile.soft_prefs || "no specific preferences");
     const vecLiteral = `[${vec.join(",")}]`;
+    const filteredProfile = toSqlFilters(profile);
 
     const candidateRows = await sql<Candidate[]>`
       select
@@ -34,10 +36,10 @@ export async function GET() {
       from match_listings(
         ${vecLiteral}::vector(768),
         20::int,
-        ${profile.listing_type}::text,
-        ${profile.max_price}::bigint,
-        ${profile.min_bhk}::int,
-        ${profile.localities}::text[]
+        ${filteredProfile.listing_type}::text,
+        ${filteredProfile.max_price}::bigint,
+        ${filteredProfile.min_bhk}::int,
+        ${filteredProfile.localities}::text[]
       )
     `;
 
