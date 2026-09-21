@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import type { DiscoverListingDTO } from "@/lib/matches/types";
 
 export function ListingCard({
@@ -35,16 +35,7 @@ export function ListingCard({
           {price_display ?? "Price on request"}
         </span>
         {listing_type && (
-          <div className="flex flex-col items-end gap-1.5">
-            <Button
-              variant="destructive"
-              size="sm"
-            >
-              <span className="text-md text-blue-400">
-                {listing_type.toUpperCase()}
-              </span>
-            </Button>
-          </div>
+          <Badge variant="destructive">{listing_type.toUpperCase()}</Badge>
         )}
       </div>
 
