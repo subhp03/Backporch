@@ -1,4 +1,12 @@
 import { Badge } from "@/components/ui/badge";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardAction,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
 import type { DiscoverListingDTO } from "@/lib/matches/types";
 
 export function ListingCard({
@@ -29,32 +37,36 @@ export function ListingCard({
   ].filter(Boolean);
 
   const card = (
-    <div className="flex flex-col gap-2 rounded-lg border border-zinc-800 bg-zinc-950 p-4 transition-colors hover:border-blue-700">
-      <div className="flex items-start justify-between gap-2">
-        <span className="text-lg font-semibold text-zinc-100">
+    <Card className="gap-2 border border-zinc-800 bg-zinc-950 transition-colors hover:border-blue-700">
+      <CardHeader>
+        <CardTitle className="text-lg font-semibold text-zinc-100">
           {price_display ?? "Price on request"}
-        </span>
+        </CardTitle>
         {listing_type && (
-          <Badge variant="destructive">{listing_type.toUpperCase()}</Badge>
+          <CardAction>
+            <Badge variant="destructive">{listing_type.toUpperCase()}</Badge>
+          </CardAction>
         )}
-      </div>
+      </CardHeader>
 
-      {locality && <span className="text-sm text-zinc-300">{locality}</span>}
+      <CardContent className="flex flex-col gap-2">
+        {locality && <span className="text-sm text-zinc-300">{locality}</span>}
 
-      {facts.length > 0 && (
-        <span className="text-sm text-zinc-500">{facts.join(" · ")}</span>
-      )}
+        {facts.length > 0 && (
+          <span className="text-sm text-zinc-500">{facts.join(" · ")}</span>
+        )}
 
-      {possession && (
-        <span className="text-xs text-zinc-600">Possession: {possession}</span>
-      )}
+        {possession && (
+          <span className="text-xs text-zinc-600">Possession: {possession}</span>
+        )}
+      </CardContent>
 
       {reason && (
-        <p className="mt-1 border-t border-zinc-800 pt-2 text-sm text-zinc-400">
+        <CardFooter className="border-zinc-800 bg-transparent text-sm text-zinc-400">
           {reason}
-        </p>
+        </CardFooter>
       )}
-    </div>
+    </Card>
   );
 
   if (!url) return card;
