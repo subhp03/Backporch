@@ -1,4 +1,4 @@
-import { BedDouble, Bath, Maximize, MapPin } from "lucide-react";
+import { BedDouble, Bath, Maximize, MapPin, CalendarDays } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -87,7 +87,10 @@ export function ListingCard({
         <CardFooter className="flex flex-col items-start gap-1 border-zinc-800 bg-transparent text-sm text-zinc-400">
           {reason && <span>{reason}</span>}
           {possession && (
-            <span className="text-xs text-zinc-600">Possession: {possession}</span>
+            <span className="flex items-center gap-1.5 text-sm text-zinc-300">
+              <CalendarDays className="h-4 w-4 text-zinc-400" />
+              Possession: {possession}
+            </span>
           )}
         </CardFooter>
       )}
