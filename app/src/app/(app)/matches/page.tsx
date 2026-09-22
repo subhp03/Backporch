@@ -1,6 +1,6 @@
-import Link from "next/link";
 import { headers } from "next/headers";
 import { ListingCard } from "@/components/ListingCard";
+import { requireCompleteProfile } from "@/lib/chat/gate";
 import type { ListingDTO } from "@/lib/matches/types";
 
 type MatchesResponse =
@@ -9,6 +9,8 @@ type MatchesResponse =
   | { error: string; message: string };
 
 export default async function MatchesPage() {
+  await requireCompleteProfile();
+
   const incomingHeaders = await headers();
   const host = incomingHeaders.get("host");
   const protocol = host?.startsWith("localhost") ? "http" : "https";
@@ -23,19 +25,7 @@ export default async function MatchesPage() {
     return <p className="p-6 text-red-400">Something went wrong: {response.message}</p>;
   }
 
-  if (response.status === "incomplete") {
-    return (
-      <div className="p-6 text-zinc-400">
-        Finish setting up your preferences in{" "}
-        <Link href="/chat" className="text-zinc-100 underline">
-          chat
-        </Link>{" "}
-        to see matches.
-      </div>
-    );
-  }
-
-  if (response.listings.length === 0) {
+  if (response.status !== "ok" || response.listings.length === 0) {
     return <p className="p-6 text-zinc-400">No matches found yet.</p>;
   }
 
