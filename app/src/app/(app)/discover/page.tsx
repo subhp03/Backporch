@@ -1,6 +1,6 @@
-import Link from "next/link";
 import { headers } from "next/headers";
 import { ListingCard } from "@/components/ListingCard";
+import { requireCompleteProfile } from "@/lib/chat/gate";
 import type { DiscoverListingDTO } from "@/lib/matches/types";
 
 type DiscoverResponse =
@@ -8,6 +8,8 @@ type DiscoverResponse =
   | { status: "ok"; listings: DiscoverListingDTO[] };
 
 export default async function DiscoverPage() {
+  await requireCompleteProfile();
+
   const incomingHeaders = await headers();
   const host = incomingHeaders.get("host");
   const protocol = host?.startsWith("localhost") ? "http" : "https";
@@ -18,19 +20,7 @@ export default async function DiscoverPage() {
   });
   const response: DiscoverResponse = await res.json();
 
-  if (response.status === "incomplete") {
-    return (
-      <div className="p-6 text-zinc-400">
-        Finish setting up your preferences in{" "}
-        <Link href="/chat" className="text-zinc-100 underline">
-          chat
-        </Link>{" "}
-        to see listings.
-      </div>
-    );
-  }
-
-  if (response.listings.length === 0) {
+  if (response.status !== "ok" || response.listings.length === 0) {
     return <p className="p-6 text-zinc-400">No listings found right now.</p>;
   }
 
