@@ -52,7 +52,7 @@ export function ListingCard({
 
       <CardContent className="flex flex-1 flex-col gap-2">
         {locality && (
-          <span className="flex items-center gap-1.5 text-md text-zinc-300">
+          <span className="mb-2 flex items-center gap-1.5 text-md text-zinc-300">
             <MapPin className="h-4 w-4 text-zinc-400" />
             {locality}
           </span>
@@ -73,7 +73,13 @@ export function ListingCard({
         )}
 
         {otherDetails.length > 0 && (
-          <span className="text-sm text-zinc-500">{otherDetails.join(" · ")}</span>
+          <div className="mt-2 flex flex-wrap gap-1.5">
+            {otherDetails.map((detail, i) => (
+              <Badge key={i} variant="secondary">
+                {detail}
+              </Badge>
+            ))}
+          </div>
         )}
       </CardContent>
 
