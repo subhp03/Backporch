@@ -41,7 +41,7 @@ export function ListingCard({
     <Card className="h-full gap-2 border border-zinc-800 bg-zinc-950 transition-colors hover:border-blue-700">
       <CardHeader>
         <CardTitle className="text-lg font-semibold text-zinc-100">
-          {price_display ?? "Price on request"}
+          {price_display ? `₹${price_display}` : "Price on request"}
         </CardTitle>
         {listing_type && (
           <CardAction>
