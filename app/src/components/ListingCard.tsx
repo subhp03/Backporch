@@ -1,3 +1,4 @@
+import { BedDouble, Bath, Maximize, MapPin } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -29,12 +30,12 @@ export function ListingCard({
   } = listing;
 
   const facts = [
-    bhk ? `${bhk} BHK` : null,
-    bathrooms ? `${bathrooms} bath` : null,
-    area_sqft ? `${area_sqft} sqft` : null,
-    furnishing,
-    property_type,
-  ].filter(Boolean);
+    bhk ? { icon: BedDouble, label: `${bhk} BHK` } : null,
+    bathrooms ? { icon: Bath, label: `${bathrooms} bath` } : null,
+    area_sqft ? { icon: Maximize, label: `${area_sqft} sqft` } : null,
+  ].filter((f) => f !== null);
+
+  const otherDetails = [furnishing, property_type].filter(Boolean);
 
   const card = (
     <Card className="h-full gap-2 border border-zinc-800 bg-zinc-950 transition-colors hover:border-blue-700">
@@ -50,10 +51,29 @@ export function ListingCard({
       </CardHeader>
 
       <CardContent className="flex flex-1 flex-col gap-2">
-        {locality && <span className="text-sm text-zinc-300">{locality}</span>}
+        {locality && (
+          <span className="flex items-center gap-1.5 text-md text-zinc-300">
+            <MapPin className="h-4 w-4 text-zinc-400" />
+            {locality}
+          </span>
+        )}
 
         {facts.length > 0 && (
-          <span className="text-sm text-zinc-500">{facts.join(" · ")}</span>
+          <div className="flex flex-wrap items-center gap-3">
+            {facts.map(({ icon: Icon, label }, i) => (
+              <span
+                key={i}
+                className="flex items-center gap-1.5 text-base text-zinc-200"
+              >
+                <Icon className="h-4 w-4 text-zinc-400" />
+                {label}
+              </span>
+            ))}
+          </div>
+        )}
+
+        {otherDetails.length > 0 && (
+          <span className="text-sm text-zinc-500">{otherDetails.join(" · ")}</span>
         )}
       </CardContent>
 
