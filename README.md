@@ -58,7 +58,7 @@ flowchart LR
     chat -->|updateProfile via Gemini| profiles
     chat --> convos
     discover -->|read, filter by locality| listings
-    matches -->|embed soft_prefs, match_listings()| listings
+    matches -->|embed soft_prefs, vector search| listings
     matches -.->|reads| profiles
     discover -.->|reads| profiles
 ```
