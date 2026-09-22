@@ -37,7 +37,7 @@ export function ListingCard({
   ].filter(Boolean);
 
   const card = (
-    <Card className="gap-2 border border-zinc-800 bg-zinc-950 transition-colors hover:border-blue-700">
+    <Card className="h-full gap-2 border border-zinc-800 bg-zinc-950 transition-colors hover:border-blue-700">
       <CardHeader>
         <CardTitle className="text-lg font-semibold text-zinc-100">
           {price_display ?? "Price on request"}
@@ -49,21 +49,20 @@ export function ListingCard({
         )}
       </CardHeader>
 
-      <CardContent className="flex flex-col gap-2">
+      <CardContent className="flex flex-1 flex-col gap-2">
         {locality && <span className="text-sm text-zinc-300">{locality}</span>}
 
         {facts.length > 0 && (
           <span className="text-sm text-zinc-500">{facts.join(" · ")}</span>
         )}
-
-        {possession && (
-          <span className="text-xs text-zinc-600">Possession: {possession}</span>
-        )}
       </CardContent>
 
-      {reason && (
-        <CardFooter className="border-zinc-800 bg-transparent text-sm text-zinc-400">
-          {reason}
+      {(reason || possession) && (
+        <CardFooter className="flex flex-col items-start gap-1 border-zinc-800 bg-transparent text-sm text-zinc-400">
+          {reason && <span>{reason}</span>}
+          {possession && (
+            <span className="text-xs text-zinc-600">Possession: {possession}</span>
+          )}
         </CardFooter>
       )}
     </Card>
@@ -72,7 +71,7 @@ export function ListingCard({
   if (!url) return card;
 
   return (
-    <a href={url} target="_blank" rel="noopener noreferrer">
+    <a href={url} target="_blank" rel="noopener noreferrer" className="block h-full">
       {card}
     </a>
   );
