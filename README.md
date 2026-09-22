@@ -6,7 +6,7 @@ to be added) into a shared Postgres database. A chat-driven onboarding flow buil
 a structured preference profile for each user, then surfaces listings two
 ways: **Discover** (random, filtered by locality) and **Matches** (a RAG
 pipeline: vector search retrieves candidates, then Gemini re-ranks and
-explains them against the full profile).
+explains them against the full profile). The project is currently an MVP and was built in a short time so the code isn't very clean. Should be refined later
 
 ## The problem
 
