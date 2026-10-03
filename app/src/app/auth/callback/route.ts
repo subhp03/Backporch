@@ -3,12 +3,12 @@ import { createClient } from "@/lib/supabase/server";
 
 /**
  * OAuth / PKCE callback. Supabase redirects here with a `code` that we
- * exchange for a session, then forward the user on to `next` (default "/").
+ * exchange for a session, then forward the user on to `next` (default "/discover").
  */
 export async function GET(request: NextRequest) {
   const { searchParams, origin } = request.nextUrl;
   const code = searchParams.get("code");
-  const next = searchParams.get("next") ?? "/";
+  const next = searchParams.get("next") ?? "/discover";
 
   if (code) {
     const supabase = await createClient();

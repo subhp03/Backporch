@@ -46,7 +46,7 @@ export function AuthUi({ view }: { view: "sign_in" | "sign_up" }) {
       return;
     }
 
-    router.replace("/");
+    router.replace("/discover");
     router.refresh();
   }
 
