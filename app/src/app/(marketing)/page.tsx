@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { FloatingNav } from "./_components/FloatingNav";
 import { Hero } from "./_components/Hero";
+import { Showcase } from "./_components/Showcase";
 import { TopNav } from "./_components/TopNav";
 
 export default async function LandingPage() {
@@ -18,6 +19,7 @@ export default async function LandingPage() {
       <TopNav />
       <FloatingNav />
       <Hero />
+      <Showcase />
       <main className="mx-auto max-w-3xl px-6">
         <section id="problem" className="flex min-h-dvh flex-col justify-center gap-4 py-16">
           <h2 className="text-3xl font-semibold capitalize">problem</h2>
