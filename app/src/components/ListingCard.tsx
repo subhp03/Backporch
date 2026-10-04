@@ -44,7 +44,7 @@ export function ListingCard({
           {price_display ? `₹${price_display}` : "Price on request"}
         </CardTitle>
         {listing_type && (
-          <CardAction>
+          <CardAction className="self-center">
             <Badge variant="destructive">{listing_type.toUpperCase()}</Badge>
           </CardAction>
         )}
