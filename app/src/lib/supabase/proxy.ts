@@ -44,6 +44,7 @@ export async function updateSession(request: NextRequest) {
   }
 
   const isPublic =
+    pathname === "/" ||
     pathname.startsWith("/sign-in") ||
     pathname.startsWith("/sign-up") ||
     pathname.startsWith("/auth");
@@ -56,7 +57,7 @@ export async function updateSession(request: NextRequest) {
 
   if (user && (pathname.startsWith("/sign-in") || pathname.startsWith("/sign-up"))) {
     const url = request.nextUrl.clone();
-    url.pathname = "/";
+    url.pathname = "/discover";
     return NextResponse.redirect(url);
   }
 
