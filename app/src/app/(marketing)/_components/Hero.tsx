@@ -26,13 +26,13 @@ export function Hero() {
         <div className="flex gap-3">
           <Link
             href="/sign-up"
-            className="rounded-full bg-[#991b1b] px-6 py-3 text-sm font-semibold text-[#fff5f5] transition-colors hover:bg-[#b91c1c]"
+            className="bg-[#991b1b] px-6 py-3 text-sm font-semibold text-[#fff5f5] transition-colors hover:bg-[#b91c1c]"
           >
             Try it for free
           </Link>
           <Link
             href="/sign-in"
-            className="rounded-full border border-zinc-700 px-6 py-3 text-sm font-semibold text-zinc-100 transition-colors hover:bg-zinc-900"
+            className="border border-zinc-700 px-6 py-3 text-sm font-semibold text-zinc-100 transition-colors hover:bg-zinc-900"
           >
             Already a user?
           </Link>
