@@ -19,7 +19,7 @@ export function Showcase() {
   return (
     <section id="showcase" className="mx-auto max-w-7xl px-6 py-24">
       <div className="mx-auto max-w-2xl text-center">
-        <h2 className="text-4xl font-semibold tracking-tight text-zinc-50">
+        <h2 className="font-pixel text-4xl font-normal text-zinc-50">
           Matches that tell you why.
         </h2>
         <p className="mt-4 text-zinc-400">

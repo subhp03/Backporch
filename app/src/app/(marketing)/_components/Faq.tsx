@@ -31,7 +31,7 @@ export function Faq() {
   return (
     <section id="faq" className="mx-auto max-w-4xl px-6 py-24">
       <div className="text-center">
-        <h2 className="text-4xl font-semibold tracking-tight text-zinc-50">
+        <h2 className="font-pixel text-4xl font-normal text-zinc-50">
           Common questions
         </h2>
         <p className="mt-4 text-zinc-400">Short answers to what comes up most.</p>
